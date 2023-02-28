@@ -1,0 +1,31 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-version:
+      java: openjdk8
+  pre_build:
+    commands:
+      - echo Just listing basic information about the envionrment
+      - which mvn
+      - mvn -version
+      - pwd
+  build:
+    commands:
+      - echo Build started on `date`
+      - mvn package
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Working on creating the tar ball with the WAR and AppSpec file for CodeDeploy
+      - mkidr appfiles
+      - cd appfiles
+      - cp ../target/HelloWorld-1.war .
+      - cp ../appspec.yml .
+      - ls -al
+      - tar -zcvf ../target/HelloWorld.tar.gz *.*
+      - cd ..
+artifacts:
+  files:
+    - target/HelloWorld.tar.gz
+  discard-paths: yes
